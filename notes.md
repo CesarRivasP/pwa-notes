@@ -1,7 +1,10 @@
 ## Tools
 
 ### Google Lighthouse
-Es una herramienta que viene con chrome la cual nos permite realizar diagnosticos de una web app, centrandose en el performance y accesibilidad. Nos permite testear si nuestra app se considera una pwa o no, y sobre todo, que pasos se deben tomar para que lo sea
+Es una herramienta que viene con chrome la cual nos permite realizar diagnosticos de una web app, centrandose en el performance y accesibilidad. Nos permite testear si nuestra app se considera una pwa o no, y sobre todo, que pasos se deben tomar para que lo sea.
+
+Lighthouse requiere de las siguientes funcionalidades:
+- Un serviceWorker (solo funciona en modo de producción)
 
 ### First meaningful paint o Primer Pintado Significativo
 Es una métrica suministrada por el navegador, que indica cuanto tarda en segundos o fracciones, la representación (renderización) del contenido más significativo en el sitio.
@@ -23,9 +26,27 @@ Nos indica en que momento esta interactiva la aplicación. Cuando nos referimos 
 
 >El Time to Interactive tiene que ver mucho con el tamaño del framework que se este utilizando.
 
-Por lo general, se intenta tener un Time to Interactive de menos de 5 segundos en Lighthouse con un telefono medium con una conexión mala
+Por lo general, se intenta tener un Time to Interactive de menos de 5 segundos en Lighthouse con un teléfono medium con una conexión mala
 
-### Activar la funcionalidad de Add to Home Screen
+### Implementar la funcionalidad de Add to Home Screen
+Es una de las mejores funcionalidades si se quiere fidelizar aun mas a nuestros usuarios. Chrome, en Android por defecto, nos propone una vez que se cumplen todos los requisitos de Lighthouse la posibilidad de agregar la aplicacion a la HomeScreen.
+
+#### configurando el manifest.json
+- short_name es el nombre que se utiliza en el home screen
+- start_url: esto nos dice en que pagina comienza nuestra app. Por temas de compatibilidad, conviene que siempre sea '/' en lugar de 'index.html'. Esto va a evitar algunos bugs particularmente en IOS
+- display: "standalone" quiere decir que la app puede correr por si misma.
+- theme_color: o color de combinación, tiene que ver con como se va a ver la aplicación, es decir, que colores se van a utilizar para que combine mas con nuestra app. Por ejemplo, la barra de tareas, la barra de la ventana, entre otros. En el theme-color ubicado en el index.html se le puede indicar el color a la barra de navegacion de chrome
+- src: ruta del icono
+- sizes: tamaño de la imagen. 512x512 es el tamaño ideal para los iconos, puesto que este permite ir desde un tamaño pequeño a uno muy grande. Se pueden expecificar varias resoluciones
+- type: formato de la imagen
+- Related-aplication: esto por defecto indica si se quiere que en el app to HomeScreen chrome recomiende una aplicación del store en lugar de la Progressive Web App. Por defecto, no es necesario.
+- Scope: se pueden tener múltiples PWA por dominio, y esto esta definido por el scope. Por defecto la aplicación de prueba (recetas) funciona en el root del dominio, asi que no hace falta cambiar nada, y se le coloca una barra para indicar que cubra todo el dominio por defecto.
+
+### ngrok
+Nos permite testear las PWA sin necesidad de llevar la aplicación a producción.
+NGROK nos permite hacer un tunel y tener un servidor https que dirige perfectamente a nuestra maquina, y de esta forma se puede testear instantaneamente una PWA con una conexión https.
+
+Para que ngrok funcione correctamente se debe tener corriendo el servidor local en una terminal, y el ngrok en otra terminal, ambas apuntando al mismo puerto … ya que ngrok … hace las veces de proxy o similar.
 
 ### Notas:
 #### Usar Gatsby o NextJS
@@ -40,4 +61,10 @@ Al primer semestre de 2018, la distribución de versions de Android más usadas 
 https://static.platzi.com/media/user_upload/Captura%20de%20pantalla%20de%202018-07-20%2001-26-23-f6656d06-eb32-4ecd-b26e-a54e137ca4db.jpg
 
 - Stack eficiente:
-ReactJS + NextJS + PWA …
+ReactJS + NextJS + PWA
+
+
+#### ServiceWorkers
+El que los ServiceWorkers sólo funcionen en modo de producción tiene que ver con que requieren de forma obligatoria estar alojados en sitios que usan sertificados SSL, es decir con protocolo https
+
+Es por razones de confiabilidad y seguridad, ya que las PWAs pueden solicitar permisos que podrían poner en riesgo la privacidad de los usuarios, y Google previene para no ser responsable de ataques Man-in-the-middle, etc.
