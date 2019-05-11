@@ -48,6 +48,11 @@ NGROK nos permite hacer un tunel y tener un servidor https que dirige perfectame
 
 Para que ngrok funcione correctamente se debe tener corriendo el servidor local en una terminal, y el ngrok en otra terminal, ambas apuntando al mismo puerto … ya que ngrok … hace las veces de proxy o similar.
 
+### Service Worker
+ES lo que permite que las PWA funcionen. Es un script que nuestro navegador corre detras de escena, que por defecto no tiene acceso a ninguna parte del brouser (no puede tocar el DOM directamente), para expone una pequeña api con la que nos podemos comunicar por ejemplo, en el caso de recibir notificaciones.
+Tambien esto significa que los serviceWorkers se les puede dar mucho mas control de lo que pasa detrás de escena. Se puede tener control absoluto de lo que sucede a nivel red, esto quiere decir que podemos controlar como se maneja todas y cada una de las request que hace nuestro navegador, por ejemplo, manejar el cache de cada una, y decidir diferentes estrategias de red como lo pueden ser establecer que ciertas cosas deban ser cacheadas por adelantado y tener una suerte de proceso de instalación dentro de nuestra app. Esto nos permite mejorar la UX, ya que si se carga todo detras de escena los tiempos de recarga de nuestra app van a ser mejores.
+Tambien se pueden utilizar cosas como push notifications, donde se puede dejar el navegador detrás de escena esperando que le envíen notificaciones como lo pueden ser los resultados de un partido de futbol en tiempo real.
+
 ### Notas:
 #### Usar Gatsby o NextJS
 - Por lo general Gatsby se recomienda para sitios estáticos y Next para apps dinámicas o más complejas, pero últimamente están teniendo paridad de features entre ambos, así que la elección se vuelve un poco más difícil.
