@@ -28,6 +28,8 @@ No hay apps Stores
 - Costos de producción menores
 - Facilidad para conseguir usuarios
 
+### Requisitos
+Uno de los requisitos fundamentales de un PWA es que todo funcione con https, que se posea una conexión encriptada. Eso tiene que ver con el nivel de seguridad que se requiere para algunas funcionalidades, que de lo contrario dejaria un gran hueco de seguridad en nuestras apps.
 
 ### Ejemplos
 - Un website promedio tarda en cargar 14 segundos en un dispositivo movil
