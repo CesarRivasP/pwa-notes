@@ -38,7 +38,12 @@ Esta nos va a permitir modificar el comportamiento de create-react-app sin tener
 - Se debe tomar en cuenta:
 * Cuando se hace un rewired de create react app se debe crear un archivo que se llame config-overrides que nos va a permitir modificar la configuración interna de lo que seria el proceso de build. Este archivo tiene la configuración mínima y necesaria para que funcione el service worker custom nuestro
 
-Algunas anotaciones de interés:
+
+El funcionamiento de un service worker por defecto toma una lista de assets para precargarlos y si la ruta coincide exactamente con un asset entonces lo tomara de cache.
+
+Workbox tiene una característica llamada registerNavigationRoute la cual se encarga de hacer el funcionamiento por defecto de un service worker más aparte si encuentra una url que no conoce va a buscar una url, en este caso index.html y que el se encargue de lo que va a mostrar.
+
+Existen diferentes estrategias de carga:
 #### Network Only
 Esta se encarga checar si hay conexión a internet, si existe una conexión realiza la petición de información, en caso de no haber conexión se rompe la página.
 
@@ -51,10 +56,29 @@ Es otra estrategia de carga, se encarga mandar la petición a internet, si la co
 #### ¿Cuándo usar Network First?
 Cuando queremos la última versión de un asset y tener soporte offline.
 
-**Cache First**: Primero busca el recurso en caché, en caso de no encontrarlo va a la red, lo trae, lo guarda en caché y nos lo sirve desde el caché. Con esto no sale nuevamente a la red a menos que sea eliminado del caché. Esta estrategia puede ser peligrosa, con este tipo de estrategias se deben cachear cosas que no cambiarían (normalmente) con el pasar del tiempo, como por ejemplo: Fuentes, Imágenes, Estáticos.
+#### Cache First
+Primero busca el recurso en caché, en caso de no encontrarlo va a la red, lo trae, lo guarda en caché y nos lo sirve desde el caché. Con esto no sale nuevamente a la red a menos que sea eliminado del caché. Esta estrategia puede ser peligrosa, con este tipo de estrategias se deben cachear cosas que no cambiarían (normalmente) con el pasar del tiempo, como por ejemplo: Fuentes, Imágenes, Estáticos.
 Esta estrategia se debe usar solamente cuando se quiere el máximo de velocidad y es un recurso que no cambia, por ejemplo: Fuentes, Imágenes, Estáticos.
 
-**Stale While Revalidate**: Va a la caché y a la red al mismo tiempo, es obvio que caché será más rápido, por eso trae primero el recurso desde el caché pero al regresar de la red con una actualización de dicho recurso lo guarda en caché y actualiza la UI. Se debe utilizar cuando se quiere mucha velocidad y es un recurso que puede estar levemente desactualizado
+
+Es una estrategia de carga que lo primero que hace es ir al cache y si encuentra el recurso lo sirve directamente. En caso de no encontrarlo va a ir a red, guardar la información en cache y servir esa versión.
+
+Esta estrategia puede ser peligrosa y solo es recomendable cuando queremos máxima velocidad y estamos manejando un recurso que nunca cambia, como una imagen o alguna fuente.
+
+Cache First se puede cachear un recurso de por vida, por lo que es bueno no abusar de este recurso
+
+
+#### Stale While Revalidate
+ Va a la caché y a la red al mismo tiempo, es obvio que caché será más rápido, por eso trae primero el recurso desde el caché pero al regresar de la red con una actualización de dicho recurso lo guarda en caché y actualiza la UI. Se debe utilizar cuando se quiere mucha velocidad y es un recurso que puede estar levemente desactualizado
+
+Esta es una estrategia de carga muy particular y que mejor funciona a la hora de mejorar el rendimiento. Lo que hace es ir a cache y a red al mismo tiempo, toma la versión más rápida que siempre será la de cache y en cuanto recibe la de red va a actualizar la versión de cache.
+
+* Al usar esta estrategia, cuando se realiza un refresh retorna el contenido de la pagina que visitamos anteriormente.
+
+Es recomendable esta estrategia cuando queremos mucha velocidad y estamos manejando un recurso que puede estar levemente desactualizado.
+
+Al momento de escribir nuestras estrategias en Workbox SI IMPORTA el orden en que pongamos las cosas, si queremos una estrategia o regla por defecto debemos poner esa regla hasta el final de todo. En Workbox las reglas se matchean de una forma muy particular. La primera que matchea es la que se aplica y el resto se anula. Es decir, que la primera va a matchear todas las request de la aplicacion y van a funcionar todas por dicha regla por mas que se le indique lo contrario despues. Por eso, cuando se tiene una regla por defecto, esta se implementa al final de todo
+
 
 Importante Recordar
 El orden de las reglas en service-worker.js es importante

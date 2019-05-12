@@ -69,3 +69,18 @@ ReactJS + NextJS + PWA
 El que los ServiceWorkers sólo funcionen en modo de producción tiene que ver con que requieren de forma obligatoria estar alojados en sitios que usan sertificados SSL, es decir con protocolo https
 
 Es por razones de confiabilidad y seguridad, ya que las PWAs pueden solicitar permisos que podrían poner en riesgo la privacidad de los usuarios, y Google previene para no ser responsable de ataques Man-in-the-middle, etc.
+
+
+### Web Share API
+Web Share API es una API reciente de Android que nos permite usar el Share nativo del sistema operativo.
+
+Para implementarlo hay que tener presente que solo funcionara si hacemos click a algún link, esto es una medida de precaución para que nadie abuse de la API obligándonos a tener que compartir algo que no queremos. Además, Web Share API por el momento solo funciona en Android así que tenemos que detectar si tenemos la característica para poder usarla.
+
+Web Share API solamente funciona con HTTPS.
+
+### Trabajando Offline
+Vamos a mejorar la UX para que nuestro usuario tenga una respuesta visible de que se encuentra offline.
+
+La forma de saber si la aplicación esta offline u online es a través de una variable llamada Navigator.onLine, algo muy importante a tener en cuenta es que la variable nos va a decir que estamos online siempre y cuando no estemos offline lo cual significa que si el usuario tiene mala conexión a internet igual va a marcar como online.
+
+La forma correcta de checar si el navegador esta online u offline es con dos eventos que se añaden a window, “offline” y “online”.
